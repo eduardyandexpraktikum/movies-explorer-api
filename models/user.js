@@ -1,5 +1,28 @@
-// user:
+const mongoose = require('mongoose');
+const validator = require('validator');
 
-// email — почта пользователя, по которой он регистрируется. Это обязательное поле, уникальное для каждого пользователя. Также оно должно валидироваться на соответствие схеме электронной почты.
-// password — **хеш пароля. Обязательное поле-строка. Нужно задать поведение по умолчанию, чтобы база данных не возвращала это поле.
-// name — имя пользователя, например: Александр или Мария. Это обязательное поле-строка от 2 до 30 символов.
+const userSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    validate: {
+      validator: (email) => validator.isEmail(email),
+      message: 'Некорректный адрес email',
+    },
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 8,
+    select: false,
+  },
+  name: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 30,
+  }
+})
+
+module.exports = mongoose.model('user', userSchema);

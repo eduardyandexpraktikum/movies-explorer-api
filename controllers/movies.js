@@ -6,4 +6,4 @@
 // POST /movies
 
 // # удаляет сохранённый фильм по id
-// DELETE /movies/_id 
+// DELETE /movies/_id
