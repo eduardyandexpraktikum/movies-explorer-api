@@ -6,7 +6,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('cors');
 const NotFoundError = require('./errors/NotFoundError');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb');
 const app = express();
 const { json } = require('express');
