@@ -29,19 +29,17 @@ const saveMovie = async (req, res, next) => {
 const deleteMovie = (req, res, next) => {
   const { movieId } = req.params;
   if (!mongoose.isValidObjectId(movieId)) {
-    next(new BadRequestError('Невозможно удалить карточку: невалидный _id'));
+    next(new BadRequestError('Невозможно удалить фильм: невалидный _id'));
   } else {
     Movie.findById(movieId)
-      .then((card) => {
-        if (!card) {
-          next(new NotFoundError('Карточка не найдена'));
-        } else if (card.owner.toString() !== req.user._id) {
-          next(new ForbiddenError('Невозможно удалить карточку: это не ваша карточка'));
+      .then((movie) => {
+        if (!movie) {
+          next(new NotFoundError('Фильм не найден'));
         } else {
           Movie.deleteOne({ _id: movieId })
             .then(() => {
               res.status(200).send({
-                message: 'Карточка удалена',
+                message: 'Фильм удален',
               });
             });
         }
