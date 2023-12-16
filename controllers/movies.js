@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Movie = require('../models/movie');
 const BadRequestError = require('../errors/BadRequestError');
-const ForbiddenError = require('../errors/ForbiddenError');
+// const ForbiddenError = require('../errors/ForbiddenError');
 const NotFoundError = require('../errors/NotFoundError');
 
 const getMovies = (req, res, next) => {
@@ -15,7 +15,8 @@ const getMovies = (req, res, next) => {
 const saveMovie = async (req, res, next) => {
   try {
     const newMovie = new Movie(req.body);
-    newMovie.owner = req._id;
+    // newMovie.owner = req._id;
+    console.log(req._id);
     res.status(200).send(await newMovie.save());
   } catch (err) {
     if (err.name === 'ValidationError') {

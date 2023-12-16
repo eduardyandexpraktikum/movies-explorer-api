@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
@@ -22,11 +22,11 @@ const signUp = async (req, res, next) => {
       email,
       password: hash,
       name,
-    })
+    });
     return res.status(201).send({
       email: newUser.email,
       name: newUser.name,
-    })
+    });
   } catch (err) {
     if (err.code === 11000) {
       next(new ConflictError('Такой email уже существует'));
@@ -36,6 +36,7 @@ const signUp = async (req, res, next) => {
       next(err);
     }
   }
+  return (next);
 };
 
 const signIn = async (req, res, next) => {
@@ -58,12 +59,13 @@ const signIn = async (req, res, next) => {
     if (!result) {
       return next(new ForbiddenError('Некорректный логин и/или пароль'));
     }
-    const token = jwt.sign({ _id: loginUser._id }, NODE_ENV === 'production' ? JWT_SECRET : 'VERY_SECRET_KEY', { expiresIn: '7d' })
-    res.status(200).send({ token, email })
+    const token = jwt.sign({ _id: loginUser._id }, NODE_ENV === 'production' ? JWT_SECRET : 'VERY_SECRET_KEY', { expiresIn: '7d' });
+    res.status(200).send({ token, email });
   } catch (err) {
     next(err);
   }
-}
+  return (next);
+};
 
 const getMe = (req, res, next) => {
   const myself = req.user._id;
@@ -88,7 +90,7 @@ const patchMe = async (req, res, next) => {
     if (err.name === 'ValidationError') {
       return next(new BadRequestError('Некорректные данные'));
     }
-    next(err);
+    return next(err);
   }
 };
 

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/UnauthorizedError');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const checkAuth = async (req, res, next) => {
@@ -13,18 +14,16 @@ const checkAuth = async (req, res, next) => {
     const result = await jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'VERY_SECRET_KEY');
     if (result) {
       req.user = {
-        _id: result._id
-      }
+        _id: result._id,
+      };
       next();
     }
-  }
-  catch (err) {
-    if (err instanceof JsonWebTokenError) {
+  } catch (err) {
+    if (err instanceof jwt.JsonWebTokenError) {
       next(new UnauthorizedError('Ошибка авторизации'));
-      return;
     }
-    return next(err);
+    next(err);
   }
-}
+};
 
 module.exports = checkAuth;
