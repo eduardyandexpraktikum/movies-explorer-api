@@ -4,11 +4,12 @@ const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const cors = require('cors');
 const { json } = require('express');
+const centralizedErrorHandler = require('./middlewares/error');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const NotFoundError = require('./errors/NotFoundError');
 
-const { PORT = 3001 } = process.env;
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb');
+const { PORT = 3001, NODE_ENV, DB_ADDRESS } = process.env;
+
+mongoose.connect(NODE_ENV === 'production' ? DB_ADDRESS : 'mongodb://127.0.0.1:27017/bitfilmsdb');
 const app = express();
 const router = require('./routes');
 
@@ -18,22 +19,8 @@ app.use(requestLogger);
 
 app.use(router);
 
-app.use('/', (req, res, next) => {
-  next(new NotFoundError('Маршрут не найден'));
-});
-
 app.use(errorLogger);
-
 app.use(errors());
-
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({
-    message: statusCode === 500
-      ? 'На сервере произошла ошибка'
-      : message,
-  });
-  next();
-});
+app.use(centralizedErrorHandler);
 
 app.listen(PORT);
