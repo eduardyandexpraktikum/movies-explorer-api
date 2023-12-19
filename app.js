@@ -6,7 +6,6 @@ const cors = require('cors');
 const { json } = require('express');
 const centralizedErrorHandler = require('./middlewares/error');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { limiter } = require('./middlewares/limiter');
 
 const { PORT = 3001, NODE_ENV, DB_ADDRESS } = process.env;
 
@@ -20,7 +19,6 @@ app.use(requestLogger);
 
 app.use(router);
 
-app.use(limiter);
 app.use(errorLogger);
 app.use(errors());
 app.use(centralizedErrorHandler);
