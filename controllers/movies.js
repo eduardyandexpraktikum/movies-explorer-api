@@ -33,15 +33,14 @@ const deleteMovie = (req, res, next) => {
     Movie.findById(movieId)
       .then((movie) => {
         if (!movie) {
-          next(new NotFoundError('Фильм не найден'));
-        } else {
-          Movie.deleteOne({ _id: movieId })
-            .then(() => {
-              res.status(200).send({
-                message: 'Фильм удален',
-              });
-            });
+          return next(new NotFoundError('Фильм не найден'));
         }
+        return Movie.deleteOne({ _id: movieId })
+          .then(() => {
+            res.status(200).send({
+              message: 'Фильм удален',
+            });
+          });
       })
       .catch(next);
   }

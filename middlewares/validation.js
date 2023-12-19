@@ -42,7 +42,7 @@ const saveMovieValidator = celebrate({
 
 const deleteMovieValidator = celebrate({
   body: Joi.object().keys({
-    movieId: Joi.number().required(),
+    movieId: Joi.number().required().length(24).hex(),
   }),
 });
 
