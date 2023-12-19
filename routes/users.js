@@ -1,7 +1,5 @@
 const userRouter = require('express').Router();
-const {
-  profileValidator,
-} = require('../middlewares/validation');
+const { profileValidator } = require('../middlewares/validation');
 
 const {
   getMe,

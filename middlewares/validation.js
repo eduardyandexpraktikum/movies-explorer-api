@@ -53,15 +53,3 @@ module.exports = {
   saveMovieValidator,
   deleteMovieValidator,
 };
-
-// country: String
-// director: String
-// duration: Number
-// year: Number
-// description: String
-// image: String
-// trailerLink: String
-// thumbnail: String
-// movieId: Number
-// nameRU: String,
-// nameEN: String,
