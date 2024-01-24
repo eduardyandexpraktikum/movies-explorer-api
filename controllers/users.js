@@ -80,26 +80,6 @@ const getMe = (req, res, next) => {
     .catch(next);
 };
 
-// const patchMe = async (req, res, next) => {
-//   try {
-//     const user = await User.findById(req.user._id);
-//     user.name = req.body.name;
-//     user.email = req.body.email;
-//     if (res.status !== 200 || res.status !== 201) {
-//       throw new NotFoundError('Некорректные данные');
-//     }
-//     return res.status(201).send(await user.save());
-//   } catch (err) {
-//     if (err.name === 'ValidationError') {
-//       next(new BadRequestError('Некорректные данные'));
-//     } else if (err.code === 11000) {
-//       next(new ConflictError('Невозможно изменить email'));
-//     } else {
-//       next(err);
-//     }
-//   }
-// };
-
 const patchMe = (req, res, next) => {
   const options = {
     new: true,
