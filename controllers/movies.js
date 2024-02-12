@@ -26,16 +26,16 @@ const saveMovie = async (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  const { movieId } = req.params;
-  if (!mongoose.isValidObjectId(movieId)) {
+  const { id } = req.params;
+  if (!mongoose.isValidObjectId(id)) {
     next(new BadRequestError('Невозможно удалить фильм: невалидный _id'));
   } else {
-    Movie.findById(movieId)
+    Movie.findById(id)
       .then((movie) => {
         if (!movie) {
           return next(new NotFoundError('Фильм не найден'));
         }
-        return Movie.deleteOne({ _id: movieId })
+        return Movie.deleteOne({ _id: id })
           .then(() => {
             res.status(200).send({
               message: 'Фильм удален',
