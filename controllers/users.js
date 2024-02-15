@@ -49,18 +49,14 @@ const signIn = async (req, res, next) => {
     if (!loginUser) {
       return next(new UnauthorizedError('Некорректный логин и/или пароль'));
     }
-    const result = bcrypt.compare(password, loginUser.password)
+    return bcrypt.compare(password, loginUser.password)
       .then((matched) => {
         if (!matched) {
-          return false;
+          return next(new ForbiddenError('Некорректный логин и/или пароль'));
         }
-        return true;
+        const token = jwt.sign({ _id: loginUser._id }, NODE_ENV === 'production' ? JWT_SECRET : 'VERY_SECRET_KEY', { expiresIn: '7d' });
+        return res.status(200).send({ token, email });
       });
-    if (!result) {
-      return next(new ForbiddenError('Некорректный логин и/или пароль'));
-    }
-    const token = jwt.sign({ _id: loginUser._id }, NODE_ENV === 'production' ? JWT_SECRET : 'VERY_SECRET_KEY', { expiresIn: '7d' });
-    res.status(200).send({ token, email });
   } catch (err) {
     next(err);
   }
